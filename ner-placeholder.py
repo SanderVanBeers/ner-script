@@ -3,6 +3,7 @@ import nltk
 from nltk import ngrams
 from string import punctuation
 import os
+import configparser
 from time import time
 
 
@@ -120,18 +121,21 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
         print()
 
 if __name__ == "__main__":
-    path_inputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.en'
-    path_inputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.de'
+    config = configparser.ConfigParser()
+    config.read("ner-placeholder.conf")
+    
+    path_inputfile_source = config['DEFAULT']['path_inputfile_source']
+    path_inputfile_target = config['DEFAULT']['path_inputfile_target']
     directory_input = os.path.dirname(path_inputfile_source)
 
-    path_outputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.en'
-    path_outputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.de'
+    path_outputfile_source = config['DEFAULT']['path_outputfile_source']
+    path_outputfile_target = config['DEFAULT']['path_outputfile_target']
 
-    extension_source = '.en'
-    extenstion_target = '.de'
+    extension_source = '.{}'.format(config['DEFAULT']['source_language'])
+    extenstion_target = '.{}'.format(config['DEFAULT']['target_language'])
 
     global placeholder
-    placeholder = '###1000###'
+    placeholder = config["DEFAULT"]["placeholder"]
 
     files = list_all_filenames(path_inputfile_source, path_inputfile_target)
 

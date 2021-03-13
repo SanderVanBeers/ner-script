@@ -5,43 +5,6 @@ from string import punctuation
 import os
 from time import time
 
-def main():
-    path_inputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.en'
-    path_inputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.de'
-    directory_input = os.path.dirname(path_inputfile_source)
-
-    path_outputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.en'
-    path_outputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.de'
-
-    extension_source = '.en'
-    extenstion_target = '.de'
-
-    global placeholder
-    placeholder = '###1000###'
-
-    files = list_all_filenames(path_inputfile_source, path_inputfile_target)
-
-    for filename in files:
-        path_inputfile_source = os.path.join(directory_input, (filename + extension_source))
-        path_inputfile_target = os.path.join(directory_input, (filename + extenstion_target))
-        print('Processing %i of %i filepairs: %s' %((files.index(filename)+1), len(files), filename))
-        
-        with open(path_inputfile_source, mode='r') as inputfile_source, open(path_inputfile_target, mode='r') as inputfile_target, open(path_outputfile_source, mode ='a') as outputfile_source, open(path_outputfile_target, mode='a') as outputfile_target:
-
-            source_text = inputfile_source.read().splitlines()
-            target_text = inputfile_target.read().splitlines()
-
-            for i in range(len(source_text)):
-                printProgressBar (i, len(source_text), prefix = 'Progress current file:', suffix = 'Complete', decimals = 1, length = 100, fill = '█', printEnd = "\r")
-                if source_text[i] != target_text[i]:
-                    result = ngram_source_target(source_text[i], target_text[i], 20)
-                    if result:
-                        source = result[0]
-                        target = result[1]
-
-                        #print(source, file=outputfile_source)
-                        #print(target, file=outputfile_target)
-
 def preprocessngram(sent, n):
 
     bigrams = ngrams(sent.split(), n)
@@ -153,4 +116,39 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
         print()
 
 
-main()
+if __name__ == "__main__":
+    path_inputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.en'
+    path_inputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/en_de-CONMT/btxt_2dir_de-XX-en-YY_News__27341-german-news-1996-2000-r2-detok.de'
+    directory_input = os.path.dirname(path_inputfile_source)
+
+    path_outputfile_source = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.en'
+    path_outputfile_target = '/home/sander/Desktop/sander.vanbeers/Continental-en-de/testing-ner.de'
+
+    extension_source = '.en'
+    extenstion_target = '.de'
+
+    global placeholder
+    placeholder = '###1000###'
+
+    files = list_all_filenames(path_inputfile_source, path_inputfile_target)
+
+    for filename in files:
+        path_inputfile_source = os.path.join(directory_input, (filename + extension_source))
+        path_inputfile_target = os.path.join(directory_input, (filename + extenstion_target))
+        print('Processing %i of %i filepairs: %s' %((files.index(filename)+1), len(files), filename))
+        
+        with open(path_inputfile_source, mode='r') as inputfile_source, open(path_inputfile_target, mode='r') as inputfile_target, open(path_outputfile_source, mode ='a') as outputfile_source, open(path_outputfile_target, mode='a') as outputfile_target:
+
+            source_text = inputfile_source.read().splitlines()
+            target_text = inputfile_target.read().splitlines()
+
+            for i in range(len(source_text)):
+                printProgressBar (i, len(source_text), prefix = 'Progress current file:', suffix = 'Complete', decimals = 1, length = 100, fill = '█', printEnd = "\r")
+                if source_text[i] != target_text[i]:
+                    result = ngram_source_target(source_text[i], target_text[i], 20)
+                    if result:
+                        source = result[0]
+                        target = result[1]
+
+                        #print(source, file=outputfile_source)
+                        #print(target, file=outputfile_target)
